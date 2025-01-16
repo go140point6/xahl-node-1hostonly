@@ -1952,7 +1952,7 @@ EOF
     sleep 2s
 
     # run the .toml uppdater to get fresh new data in file.
-    /usr/bin/python3 $SCRIPT_DIR/xahl-node/updater.py
+    /usr/bin/python3 $SCRIPT_DIR/updater.py
 }
 
 
