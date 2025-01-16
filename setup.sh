@@ -1871,10 +1871,10 @@ EOF
     sudo sh -c "cat $TMP_FILE08 > /home/www/error/custom_403.html"
     echo
     echo -e "${GREEN}## ${YELLOW}Setup: (re)downlaoding the .toml updater, and setting permissions ${NC}"
-    sudo rm -f $SCRIPT_DIR/xahl-node/updater.py
-    sudo wget -O $SCRIPT_DIR/xahl-node/updater.py $TOMLUPDATER_URL
-    sudo chmod +x $SCRIPT_DIR/xahl-node/updater.py
-    cron_job="*/15 * * * * /usr/bin/python3 $SCRIPT_DIR/xahl-node/updater.py"
+    sudo rm -f $SCRIPT_DIR/updater.py
+    sudo wget -O $SCRIPT_DIR/updater.py $TOMLUPDATER_URL
+    sudo chmod +x $SCRIPT_DIR/updater.py
+    cron_job="*/15 * * * * /usr/bin/python3 $SCRIPT_DIR/updater.py"
     echo
     if sudo crontab -l 2>/dev/null| grep -Fxq "$cron_job"; then
         echo -e "${GREEN}## ${YELLOW}Setup: Cron job for .toml updater already exists. No changes made. ${NC}"
