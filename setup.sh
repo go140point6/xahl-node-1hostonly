@@ -609,7 +609,9 @@ FUNC_CLONE_NODE_SETUP(){
         NODE_DB_RELATIONAL="backend=rwdb"
     fi
 
-sudo cat <<EOF > /opt/xahaud/etc/xahaud.cfg
+#sudo cat <<EOF > /opt/xahaud/etc/xahaud.cfg
+TMP_FILE06=$(mktemp)
+sudo cat << EOF > $TMP_FILE06
 [peers_max]
 20
 
@@ -704,6 +706,7 @@ account_reserve = 1000000
 owner_reserve = 200000
 
 EOF
+    sudo sh -c "cat $TMP_FILE06 > /opt/xahaud/etc/xahaud.cfg"
 
     if [ "$NODE_TYPE" == "validator" ] || [ "$NODE_TYPE" == "validatorHistory" ]; then
         echo "[validator_token]" >> /opt/xahaud/etc/xahaud.cfg
@@ -1035,7 +1038,9 @@ FUNC_INSTALL_LANDINGPAGE(){
         if [  -f /home/www/index.html ]; then
             sudo rm -f /home/www/index.html
         fi
-        sudo cat <<EOF > /home/www/index.html
+        #sudo cat <<EOF > /home/www/index.html
+        TMP_FILE07=$(mktemp)
+        cat <<EOF > $TMP_FILE07
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1442,13 +1447,16 @@ footer a:hover {
 </body>
 </html>
 EOF
+    sudo sh -c "cat $TMP_FILE07 > /home/www/index.html"
 
         sudo mkdir -p /home/www/error
         echo "created /home/www/error directory for blocked page, re-installing webpage"
         if [  -f /home/www/error/custom_403.html ]; then
             sudo rm -r /home/www/error/custom_403.html
         fi        
-        sudo cat <<EOF > /home/www/error/custom_403.html
+        #sudo cat <<EOF > /home/www/error/custom_403.html
+        TMP_FILE08=$(mktemp)
+        cat <<EOF > $TMP_FILE08
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1860,6 +1868,7 @@ footer a:hover {
 </body>
 </html>
 EOF
+    sudo sh -c "cat $TMP_FILE08 > /home/www/error/custom_403.html"
     echo
     echo -e "${GREEN}## ${YELLOW}Setup: (re)downlaoding the .toml updater, and setting permissions ${NC}"
     sudo rm -f /root/xahl-node/updater.py
@@ -1906,7 +1915,9 @@ EOF
         sudo mkdir -p /home/www/.well-known
         echo "created /home/www.well-known directory for .toml file, and re-creating default .toml file"
         sudo rm -f /home/www/.well-known/xahau.toml
-        sudo cat <<EOF > /home/www/.well-known/xahau.toml
+        #sudo cat <<EOF > /home/www/.well-known/xahau.toml
+        TMP_FILE09=$(mktemp)
+        cat <<EOF > $TMP_FILE09
 [[METADATA]]
 created = $FDATE
 modified = $FDATE
@@ -1930,6 +1941,7 @@ NETWORK = "$NODE_CHAIN_NAME"
 
 # End of file
 EOF
+    sudo sh -c "cat $TMP_FILE09 > /home/www/.well-known/xahau.toml"
 
     else
         echo -e "${GREEN}## ${YELLOW}Setup: Skipped re-installing default xahau.toml file, due to vars file config... ${NC}"
@@ -2066,7 +2078,9 @@ FUNC_NGINX_CLEAR_RECREATE() {
     
     if [ "$INSTALL_CERTBOT_SSL" == "true" ] && [ -f /etc/letsencrypt/live/$USER_DOMAIN/privkey.pem ]; then
     echo -e "${GREEN}## ${YELLOW}Setup: previous SSL files found, installing SSL type .conf file... ${NC}"
-        sudo cat <<EOF > $NGX_CONF_NEW/xahau
+        #sudo cat <<EOF > $NGX_CONF_NEW/xahau
+        TMP_FILE10=$(mktemp)
+        cat <<EOF > $TMP_FILE10
 set_real_ip_from $NGINX_PROXY_IP;
 real_ip_header X-Real-IP;
 real_ip_recursive on;
@@ -2186,10 +2200,14 @@ server {
 
 }
 EOF
+    sudo sh -c "cat $TMP_FILE10 > $NGX_CONF_NEW/xahau"
 
     else
     echo -e "${GREEN}## ${YELLOW}Setup: installing non-SSL type .conf file... ${NC}"
-    sudo cat <<EOF > $NGX_CONF_NEW/xahau
+    
+    #sudo cat <<EOF > $NGX_CONF_NEW/xahau
+    TMP_FILE11=$(mktemp)
+    cat <<EOF > $TMP_FILE11
 set_real_ip_from $NGINX_PROXY_IP;
 real_ip_header X-Real-IP;
 real_ip_recursive on;
@@ -2293,6 +2311,7 @@ server {
 
 }
 EOF
+    sudo sh -c "cat $TMP_FILE11 > $NGX_CONF_NEW/xahau"
     sudo chmod 644 $NGX_CONF_NEW
     fi
 
@@ -2333,7 +2352,9 @@ FUNC_LOGROTATE(){
 
     fi
 
-        cat <<EOF > /tmp/tmpxahau-logs
+        #cat <<EOF > /tmp/tmpxahau-logs
+        TMP_FILE12=$(mktemp)
+        cat <<EOF > $TMP_FILE12
 /opt/xahaud/log/*.log
         {
             su $USER_ID $USER_ID
@@ -2352,7 +2373,7 @@ FUNC_LOGROTATE(){
         }    
 EOF
 
-    sudo sh -c 'cat /tmp/tmpxahau-logs > /etc/logrotate.d/xahau-logs'
+    sudo sh -c "cat $TMP_FILE12 > /etc/logrotate.d/xahau-logs"
 
 }
 
