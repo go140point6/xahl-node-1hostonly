@@ -744,9 +744,8 @@ FUNC_XAHAUD_UPDATER(){
 
         # Copy the provided update script to /usr/local/bin
         ##cat << 'EOF' > "$UPDATE_SCRIPT_PATH"
-        TMP_FILE99=$(mktemp)
-        sudo cat << EOF > $TMP_FILE99
-
+    TMP_FILE99=$(mktemp)
+    sudo cat << EOF > $TMP_FILE99
 #!/bin/bash
 # Copy this file to /usr/local/bin as root
 # make it executable - chmod +x /usr/local/bin/root
