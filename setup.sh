@@ -759,6 +759,10 @@ while getopts "v:s" opt; do
 case $opt in
     v) VERSION=$OPTARG ;;
     s) SCREEN_OUTPUT=true ;;
+    *) 
+       echo "Invalid option: -\$OPTARG" >&2
+       exit 1
+       ;;
 esac
 done
 
