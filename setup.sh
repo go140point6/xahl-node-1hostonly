@@ -743,7 +743,10 @@ FUNC_XAHAUD_UPDATER(){
         mkdir -p "$LOG_DIR"
 
         # Copy the provided update script to /usr/local/bin
-        cat << 'EOF' > "$UPDATE_SCRIPT_PATH"
+        ##cat << 'EOF' > "$UPDATE_SCRIPT_PATH"
+        TMP_FILE99=$(mktemp)
+        sudo cat << EOF > $TMP_FILE99
+
 #!/bin/bash
 # Copy this file to /usr/local/bin as root
 # make it executable - chmod +x /usr/local/bin/root
@@ -822,8 +825,9 @@ else
 log "Update available: No"
 fi
 EOF
+    sudo sh -c "cat $TMP_FILE99 > $UPDATE_SCRIPT_PATH"
         # Make the update script executable
-        chmod +x "$UPDATE_SCRIPT_PATH"
+        sudo chmod +x "$UPDATE_SCRIPT_PATH"
 
         # add to cronjob
         cron_job="0 */${AUTOUPDATE_CHECK_INTERVAL} * * * root sleep \$((RANDOM*3540/32768)) && $UPDATE_SCRIPT_PATH >> $LOG_FILE 2>&1"
@@ -2428,7 +2432,7 @@ FUNC_NODE_DEPLOY(){
     FUNC_CLONE_NODE_SETUP;
 
     # setup and install the landing page, request public email if needed, and add CRON job entry
-    FUNC_INSTALL_LANDINGPAGE;
+    #FUNC_INSTALL_LANDINGPAGE;
 
     # install xahaud auto updater
     FUNC_XAHAUD_UPDATER;
